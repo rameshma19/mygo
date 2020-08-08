@@ -39,3 +39,5 @@ func (p *Products2) getProducts(rw http.ResponseWriter, req *http.Request) {
 func (p *Products2) addProduct(rw http.ResponseWriter, req *http.Request) {
 	p.l.Println("Handle Post Products")
 }
+
+//Just trying git
