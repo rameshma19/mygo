@@ -8,10 +8,14 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/rameshma19/mygo/microservices/handlers"
+	"github.com/mygo/microservices/handlers"
 )
 
+//var bindAddress = env.String("BIND_ADDRESS", false, ":9090", "Bind address for the server")
+
 func main() {
+
+	//env.Parse()
 
 	// http.HandleFunc("/hello", func(http.ResponseWriter, *http.Request) {
 	// 	log.Println("Hello World!!")

@@ -3,6 +3,8 @@ package handlers
 import (
 	"log"
 	"net/http"
+
+	"github.com/mygo/microservices/data"
 )
 
 type Products struct {
@@ -29,7 +31,7 @@ func (p *Products) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 func (p *Products) getProducts(rw http.ResponseWriter, req *http.Request) {
 	p.l.Println("Handle Get Products")
 
-	lp := getProductList()
+	lp := data.GetProducts()
 	err := lp.ToJSON(rw)
 	if err != nil {
 		http.Error(rw, "Unable to marshal json", http.StatusInternalServerError)

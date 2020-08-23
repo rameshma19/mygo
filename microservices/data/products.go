@@ -24,11 +24,11 @@ func (p *Products) ToJSON(w io.Writer) error {
 	return e.Encode(p)
 }
 
-func getProductList() Products {
-	return productList
+func GetProducts() Products {
+	return ProductList
 }
 
-var productList = []*Product{
+var ProductList = []*Product{
 	&Product{
 		ID:        1,
 		Name:      "Latte",
