@@ -1,19 +1,19 @@
-package main
+package handlers
 
 import (
 	"log"
 	"net/http"
 )
 
-type Products2 struct {
+type Products struct {
 	l *log.Logger
 }
 
-func newProductHandler(l *log.Logger) *Products2 {
-	return &Products2{l}
+func NewProducts(l *log.Logger) *Products {
+	return &Products{l}
 }
 
-func (p *Products2) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+func (p *Products) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 	if req.Method == http.MethodGet {
 		p.getProducts(rw, req)
@@ -26,7 +26,7 @@ func (p *Products2) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	rw.WriteHeader(http.StatusMethodNotAllowed)
 }
 
-func (p *Products2) getProducts(rw http.ResponseWriter, req *http.Request) {
+func (p *Products) getProducts(rw http.ResponseWriter, req *http.Request) {
 	p.l.Println("Handle Get Products")
 
 	lp := getProductList()
@@ -36,7 +36,7 @@ func (p *Products2) getProducts(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (p *Products2) addProduct(rw http.ResponseWriter, req *http.Request) {
+func (p *Products) addProduct(rw http.ResponseWriter, req *http.Request) {
 	p.l.Println("Handle Post Products")
 }
 

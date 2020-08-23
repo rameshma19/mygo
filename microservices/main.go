@@ -22,7 +22,7 @@ func main() {
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
 	// hh := NewHello(l)
 	// bh := NewGoodBye(l)
-	ph := newProductHandler(l)
+	ph := NewProducts(l)
 
 	sm := http.NewServeMux()
 	// sm.Handle("/hello", hh)
