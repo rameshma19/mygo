@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/mygo/microservices/handlers"
 )
 
@@ -30,10 +31,17 @@ func main() {
 	// bh := NewGoodBye(l)
 	ph := handlers.NewProducts(l)
 
-	sm := http.NewServeMux()
+	sm := mux.NewRouter()
+	getRouter := sm.Methods("GET").Subrouter()
+	getRouter.HandleFunc("/", ph.GetProducts)
+
+	putRouter := sm.Methods("PUT").Subrouter()
+	putRouter.HandleFunc("/{id:[0-9]+", ph.UpdateProduct)
+
+	//sm := http.NewServeMux()
 	// sm.Handle("/hello", hh)
 	// sm.Handle("/bye", bh)
-	sm.Handle("/", ph)
+	//sm.Handle("/products", ph)
 
 	MyHTTPSvr := &http.Server{
 		Addr:         ":8081",
