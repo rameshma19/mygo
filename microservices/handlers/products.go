@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 
 	"github.com/mygo/microservices/data"
 )
@@ -62,24 +62,23 @@ func NewProducts(l *log.Logger) *Products {
 // 	rw.WriteHeader(http.StatusMethodNotAllowed)
 // }
 
-func (p *Products) GetProducts(rw http.ResponseWriter, req *http.Request) {
-	p.l.Println("Handle Get Products")
-
+func (p *Products) GetProducts(c *gin.Context) {
+	p.l.Println("Handle Get Products using Gin framework")
 	lp := data.GetProducts()
-
+	rw := c.Writer
 	err := lp.ToJSON(rw)
+
 	if err != nil {
 		http.Error(rw, "Unable to marshal json", http.StatusInternalServerError)
 	}
 }
 
-func (p *Products) AddProduct(rw http.ResponseWriter, req *http.Request) {
-	p.l.Println("Handle Post Products")
+func (p *Products) AddProduct(c *gin.Context) {
+	p.l.Println("Handle POST Products using Gin framework")
+	rw := c.Writer
 
 	prod := &data.Product{}
-
-	err := prod.FromJSON(req.Body)
-
+	err := prod.FromJSON(c.Request.Body)
 	if err != nil {
 		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
 	}
@@ -89,26 +88,24 @@ func (p *Products) AddProduct(rw http.ResponseWriter, req *http.Request) {
 	p.l.Printf("Prod: %#v", prod)
 }
 
-func (p *Products) UpdateProduct(rw http.ResponseWriter, req *http.Request) {
+func (p *Products) UpdateProduct(c *gin.Context) {
 
-	vars := mux.Vars(req)
+	p.l.Println("Handle PUT Products using Gin framework")
 
-	p.l.Println("Handle Put1 Products")
-
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		http.Error(rw, "Unable to convert id to int", http.StatusBadRequest)
-		return
-	}
-
-	p.l.Println("Handle Put2 Products", id)
+	rw := c.Writer
+	req := c.Request
 
 	prod := &data.Product{}
 
-	err = prod.FromJSON(req.Body)
-
+	err := prod.FromJSON(req.Body)
 	if err != nil {
 		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		http.Error(rw, "Unable to convert id to int", http.StatusBadRequest)
+		return
 	}
 
 	err = data.UpdateProduct(id, prod)
@@ -119,5 +116,78 @@ func (p *Products) UpdateProduct(rw http.ResponseWriter, req *http.Request) {
 
 	p.l.Printf("Prod: %#v", prod)
 }
+
+func (p *Products) MiddlewareValidateProduct(c *gin.Context) {
+
+	p.l.Println("Inside MiddlewareValidateProduct using Gin framework")
+
+	rw := c.Writer
+	req := c.Request
+	prod := &data.Product{}
+	err := prod.FromJSON(req.Body)
+	if err != nil {
+		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
+		return
+	}
+	return
+}
+
+// func (p *Products) GetProducts(rw http.ResponseWriter, req *http.Request) {
+// 	p.l.Println("Handle Get Products")
+
+// 	lp := data.GetProducts()
+
+// 	err := lp.ToJSON(rw)
+// 	if err != nil {
+// 		http.Error(rw, "Unable to marshal json", http.StatusInternalServerError)
+// 	}
+// }
+
+// func (p *Products) AddProduct(rw http.ResponseWriter, req *http.Request) {
+// 	p.l.Println("Handle Post Products")
+
+// 	prod := &data.Product{}
+
+// 	err := prod.FromJSON(req.Body)
+
+// 	if err != nil {
+// 		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
+// 	}
+
+// 	data.AddProduct(prod)
+
+// 	p.l.Printf("Prod: %#v", prod)
+// }
+
+// func (p *Products) UpdateProduct(rw http.ResponseWriter, req *http.Request) {
+
+// 	vars := mux.Vars(req)
+
+// 	p.l.Println("Handle Put1 Products")
+
+// 	id, err := strconv.Atoi(vars["id"])
+// 	if err != nil {
+// 		http.Error(rw, "Unable to convert id to int", http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	p.l.Println("Handle Put2 Products", id)
+
+// 	prod := &data.Product{}
+
+// 	err = prod.FromJSON(req.Body)
+
+// 	if err != nil {
+// 		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
+// 	}
+
+// 	err = data.UpdateProduct(id, prod)
+// 	if err != nil {
+// 		http.Error(rw, "Product Not found", http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	p.l.Printf("Prod: %#v", prod)
+// }
 
 //Just trying git

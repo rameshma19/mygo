@@ -1,14 +1,10 @@
 package main
 
 import (
-	"context"
 	"log"
-	"net/http"
 	"os"
-	"os/signal"
-	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/mygo/microservices/handlers"
 )
 
@@ -31,41 +27,56 @@ func main() {
 	// bh := NewGoodBye(l)
 	ph := handlers.NewProducts(l)
 
-	sm := mux.NewRouter()
-	getRouter := sm.Methods("GET").Subrouter()
-	getRouter.HandleFunc("/", ph.GetProducts)
+	//sm := mux.NewRouter()
+	// getRouter := sm.Methods(http.MethodGet).Subrouter()
+	// getRouter.HandleFunc("/", ph.GetProducts)
 
-	putRouter := sm.Methods("PUT").Subrouter()
-	putRouter.HandleFunc("/{id:[0-9]+", ph.UpdateProduct)
+	//router := gin.Default()
+	r := gin.New()
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
+	r.Use(ph.MiddlewareValidateProduct)
+
+	r.GET("/", ph.GetProducts)
+	r.POST("/", ph.AddProduct)
+	r.PUT("/:id", ph.UpdateProduct)
+
+	r.Run(":9090")
+
+	// putRouter := sm.Methods(http.MethodPut).Subrouter()
+	// putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProduct)
+
+	// postRouter := sm.Methods(http.MethodPost).Subrouter()
+	// postRouter.HandleFunc("/", ph.AddProduct)
 
 	//sm := http.NewServeMux()
 	// sm.Handle("/hello", hh)
 	// sm.Handle("/bye", bh)
 	//sm.Handle("/products", ph)
 
-	MyHTTPSvr := &http.Server{
-		Addr:         ":8081",
-		Handler:      sm,
-		IdleTimeout:  120 * time.Second,
-		ReadTimeout:  1 * time.Second,
-		WriteTimeout: 1 * time.Second,
-	}
-	go func() {
-		err := MyHTTPSvr.ListenAndServe()
-		if err != nil {
-			l.Fatal(l)
-		}
-	}()
+	// MyHTTPSvr := &http.Server{
+	// 	Addr:         ":8081",
+	// 	Handler:      sm,
+	// 	IdleTimeout:  120 * time.Second,
+	// 	ReadTimeout:  1 * time.Second,
+	// 	WriteTimeout: 1 * time.Second,
+	// }
+	// go func() {
+	// 	err := MyHTTPSvr.ListenAndServe()
+	// 	if err != nil {
+	// 		l.Fatal(l)
+	// 	}
+	// }()
 
-	sigChan := make(chan os.Signal)
-	signal.Notify(sigChan, os.Interrupt)
-	signal.Notify(sigChan, os.Kill)
+	// sigChan := make(chan os.Signal)
+	// signal.Notify(sigChan, os.Interrupt)
+	// signal.Notify(sigChan, os.Kill)
 
-	sig := <-sigChan
-	l.Println("Received Terminate, graceful shutdown", sig)
+	// sig := <-sigChan
+	// l.Println("Received Terminate, graceful shutdown", sig)
 
-	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
-	MyHTTPSvr.Shutdown(tc)
+	// tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
+	// //MyHTTPSvr.Shutdown(tc)
 }
 
 // func reqHandler(http.ResponseWriter, *http.Request) {
