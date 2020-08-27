@@ -73,16 +73,17 @@ func (p *Products) GetProducts(c *gin.Context) {
 	}
 }
 
-func (p *Products) AddProduct(c *gin.Context) {
+func (p *Products) AddProduct(ctx *gin.Context) {
 	p.l.Println("Handle POST Products using Gin framework")
-	rw := c.Writer
+	rw := ctx.Writer
 
 	prod := &data.Product{}
-	err := prod.FromJSON(c.Request.Body)
+	err := prod.FromJSON(ctx.Request.Body)
 	if err != nil {
 		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
 	}
 
+	ctx.BindJSON(prod)
 	data.AddProduct(prod)
 
 	p.l.Printf("Prod: %#v", prod)
@@ -102,7 +103,9 @@ func (p *Products) UpdateProduct(c *gin.Context) {
 		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	idS, _ := c.Params.Get("id")
+	p.l.Println("id", idS)
+	id, err := strconv.Atoi(idS)
 	if err != nil {
 		http.Error(rw, "Unable to convert id to int", http.StatusBadRequest)
 		return

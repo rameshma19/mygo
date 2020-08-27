@@ -31,17 +31,13 @@ func main() {
 	// getRouter := sm.Methods(http.MethodGet).Subrouter()
 	// getRouter.HandleFunc("/", ph.GetProducts)
 
-	//router := gin.Default()
-	r := gin.New()
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
-	r.Use(ph.MiddlewareValidateProduct)
+	server := gin.Default()
 
-	r.GET("/", ph.GetProducts)
-	r.POST("/", ph.AddProduct)
-	r.PUT("/:id", ph.UpdateProduct)
+	server.GET("/", ph.GetProducts)
+	server.POST("/", ph.AddProduct)
+	server.PUT("/:id", ph.UpdateProduct)
 
-	r.Run(":9090")
+	server.Run(":9090")
 
 	// putRouter := sm.Methods(http.MethodPut).Subrouter()
 	// putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProduct)
