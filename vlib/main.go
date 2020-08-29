@@ -9,5 +9,8 @@ func main() {
 	server := gin.Default()
 
 	server.GET("/", controller.ListVideos)
+	server.POST("/", controller.AddVideos)
+	server.PUT("/", controller.UpdateVideos)
+
 	server.Run(":8080")
 }

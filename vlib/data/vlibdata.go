@@ -1,9 +1,12 @@
 package data
 
-//jkasjdkhjdhsd
 type VideoLibrary struct {
-	ID       int
-	Title    string
-	Langague string
-	Link     string
+	ID       int    `json: "id"`
+	Title    string `json: "title"`
+	Langague string `json:"lang"`
+	Link     string `json:"link"`
+}
+
+func listVideos() {
+
 }
