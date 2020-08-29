@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/mygo/microservices/data"
+
 )
 
 type Products struct {
@@ -192,5 +193,31 @@ func (p *Products) MiddlewareValidateProduct(c *gin.Context) {
 
 // 	p.l.Printf("Prod: %#v", prod)
 // }
+func (p *Products) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+
+	if req.Method == http.MethodGet {
+		p.getProducts(rw, req)
+		return
+	} else if req.Method == http.MethodPost {
+		p.addProduct(rw, req)
+		return
+	}
+	// all other case
+	rw.WriteHeader(http.StatusMethodNotAllowed)
+}
+
+func (p *Products) getProducts(rw http.ResponseWriter, req *http.Request) {
+	p.l.Println("Handle Get Products")
+
+	lp := getProductList()
+	err := lp.ToJSON(rw)
+	if err != nil {
+		http.Error(rw, "Unable to marshal json", http.StatusInternalServerError)
+	}
+}
+
+func (p *Products) addProduct(rw http.ResponseWriter, req *http.Request) {
+	p.l.Println("Handle Post Products")
+}
 
 //Just trying git
