@@ -29,17 +29,6 @@ func (p *Product) Validate() error {
 func (p *Product) FromJSON(r io.Reader) error {
 	d := json.NewDecoder(r)
 	return d.Decode(p)
-)
-
-type Product struct {
-	ID        int     `jason: "id"`
-	Name      string  `jason: "name"`
-	Desc      string  `jason: "desc"`
-	Price     float32 `jason: "price"`
-	SKU       string  `jason: "sku"`
-	CreatedAt string  `jason: "~"`
-	UpdatedAt string  `jason: "~"`
-	DeletedAt string  `jason: "~"`
 }
 
 type Products []*Product

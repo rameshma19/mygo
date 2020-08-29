@@ -7,7 +7,3 @@ type VideoLibrary struct {
 	Langague string `json:"lang"`
 	Link     string `json:"link"`
 }
-
-func listVideos() {
-
-}
