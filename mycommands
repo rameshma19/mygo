@@ -1,0 +1,9 @@
+Testing
+    go test -cover ./...
+    go test ./..
+
+go commands
+    make dev 
+        [Makefile - go run main.go]
+    go run main.go
+
