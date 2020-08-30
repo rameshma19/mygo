@@ -5,6 +5,7 @@ import (
 	"github.com/mygo/newsfeeder/handler"
 )
 
+//This is main function
 func main() {
 	r := gin.Default()
 	r.GET("/ping", handler.PingGet)
