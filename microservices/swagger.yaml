@@ -1,0 +1,9 @@
+paths:
+  /products:
+    get:
+      operationId: listProducts
+    post:
+      operationId: AddProducts
+    put:
+      operationId: UpdateProducts
+swagger: "2.0"
