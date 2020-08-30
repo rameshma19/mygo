@@ -1,4 +1,4 @@
-// Package classification Products API.
+// Package handlers Products API.
 //
 // the purpose of this application is to provide an application
 // that is using plain go code to define an API
@@ -36,10 +36,12 @@ import (
 	"github.com/mygo/microservices/data"
 )
 
+// Products struct
 type Products struct {
 	l *log.Logger
 }
 
+// NewProducts
 func NewProducts(l *log.Logger) *Products {
 	return &Products{l}
 }
