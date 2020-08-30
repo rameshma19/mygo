@@ -1,59 +1,53 @@
+// Package classification Products API.
+//
+// the purpose of this application is to provide an application
+// that is using plain go code to define an API
+//
+// This should demonstrate all the possible comment annotations
+// that are available to turn go code into a fully compliant swagger 2.0 spec
+//
+// Terms Of Service:
+//
+// there are no TOS at this moment, use at your own risk we take no responsibility
+//
+//     Schemes: http
+//     Host: localhost
+//     BasePath: /
+//     Version: 0.0.1
+//     License: <none>
+//     Contact: Ramesh Mantripragada
+//
+//     Consumes:
+//     - application/json
+//
+//     Produces:
+//     - application/json
+//
+// swagger:model
 package main
 
 import (
-	"context"
 	"log"
-	"net/http"
 	"os"
-	"os/signal"
-	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/mygo/microservices/handlers"
 )
+
+//var bindAddress = env.String("BIND_ADDRESS", false, ":9090", "Bind address for the server")
 
 func main() {
 
-	// http.HandleFunc("/hello", func(http.ResponseWriter, *http.Request) {
-	// 	log.Println("Hello World!!")
-	// })
-
-	// http.HandleFunc("/goodbye", func(rw http.ResponseWriter, req *http.Request) {
-
-	// 	// log.Printf("Data %s\n", d)
-	// })
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
 	// hh := NewHello(l)
 	// bh := NewGoodBye(l)
-	ph := newProductHandler(l)
+	ph := handlers.NewProducts(l)
 
-	sm := http.NewServeMux()
-	// sm.Handle("/hello", hh)
-	// sm.Handle("/bye", bh)
-	sm.Handle("/", ph)
+	server := gin.Default()
 
-	MyHTTPSvr := &http.Server{
-		Addr:         ":8081",
-		Handler:      sm,
-		IdleTimeout:  120 * time.Second,
-		ReadTimeout:  1 * time.Second,
-		WriteTimeout: 1 * time.Second,
-	}
-	go func() {
-		err := MyHTTPSvr.ListenAndServe()
-		if err != nil {
-			l.Fatal(l)
-		}
-	}()
+	server.GET("/", ph.GetProducts)
+	server.POST("/", ph.AddProduct)
+	server.PUT("/:id", ph.UpdateProduct)
 
-	sigChan := make(chan os.Signal)
-	signal.Notify(sigChan, os.Interrupt)
-	signal.Notify(sigChan, os.Kill)
-
-	sig := <-sigChan
-	l.Println("Received Terminate, graceful shutdown", sig)
-
-	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
-	MyHTTPSvr.Shutdown(tc)
+	server.Run(":9090")
 }
-
-// func reqHandler(http.ResponseWriter, *http.Request) {
-// 	log.Println("Hello World!!")
-// }
