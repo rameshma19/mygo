@@ -23,9 +23,9 @@ func homePage(ctx gin.Context) {
 }
 
 func reqHandler() {
-	gin.Default()
-	server := gin.
-
+	server := gin.Default()
+	server.GET("/", homePage(*gin.Context))
+	server.Run("localhost:8081")
 }
 
 //GenerateJWT function
@@ -46,11 +46,12 @@ func GenerateJWT() (string, error) {
 
 func main() {
 	fmt.Println("My simple client")
-	fmt.Println(mySigningKey)
+	reqHandler()
+	// fmt.Println(mySigningKey)
 
-	tokenString, err := GenerateJWT()
-	if err != nil {
-		fmt.Errorf("Error generating token string")
-	}
-	fmt.Println(tokenString)
+	// tokenString, err := GenerateJWT()
+	// if err != nil {
+	// 	fmt.Errorf("Error generating token string")
+	// }
+	// fmt.Println(tokenString)
 }
