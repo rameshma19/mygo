@@ -1,3 +1,29 @@
+// Package classification Products API.
+//
+// the purpose of this application is to provide an application
+// that is using plain go code to define an API
+//
+// This should demonstrate all the possible comment annotations
+// that are available to turn go code into a fully compliant swagger 2.0 spec
+//
+// Terms Of Service:
+//
+// there are no TOS at this moment, use at your own risk we take no responsibility
+//
+//     Schemes: http
+//     Host: localhost
+//     BasePath: /
+//     Version: 0.0.1
+//     License: <none>
+//     Contact: Ramesh Mantripragada
+//
+//     Consumes:
+//     - application/json
+//
+//     Produces:
+//     - application/json
+//
+// swagger:model
 package data
 
 import (
@@ -29,17 +55,6 @@ func (p *Product) Validate() error {
 func (p *Product) FromJSON(r io.Reader) error {
 	d := json.NewDecoder(r)
 	return d.Decode(p)
-)
-
-type Product struct {
-	ID        int     `jason: "id"`
-	Name      string  `jason: "name"`
-	Desc      string  `jason: "desc"`
-	Price     float32 `jason: "price"`
-	SKU       string  `jason: "sku"`
-	CreatedAt string  `jason: "~"`
-	UpdatedAt string  `jason: "~"`
-	DeletedAt string  `jason: "~"`
 }
 
 type Products []*Product
