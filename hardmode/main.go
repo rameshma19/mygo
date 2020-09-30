@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+//New update
 func main() {
 	fn := os.Args[1]
 	f, e := os.Open(fn)
