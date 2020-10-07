@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package proto;
+
+message Request {
+    bigint a = 1;
+    longint64 b = 2;
+}
+
+message Response {
+    longint64 result = 1;
+}
+
+service CalcService {
+    rpc Add(Request) returns (Response);
+    rpc Multiply(Request) returns (Response);
+    rpc Divide(Request) returns (Response);
+}
+
+
+
