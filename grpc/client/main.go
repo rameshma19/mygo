@@ -81,7 +81,7 @@ func main() {
 		}
 
 		req := &proto.Request{A: int64(a), B: int64(b)}
-		if resp, err := client.Divide(ctx, req); err == nil {
+		if resp, err := client.Dividels(ctx, req); err == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"result": fmt.Sprint(resp.Result),
 			})
